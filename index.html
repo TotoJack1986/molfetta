@@ -877,7 +877,7 @@ function travelMinutes(a,b){
     });
   }
 
-  async function acFetch(q){
+  async function acFetchPhoton(q){
     // FIX40: Photon (komoot) per evitare errori/CORS e limiti Nominatim
     // docs response: {features:[{geometry:{coordinates:[lon,lat]}, properties:{name,city,country,street,postcode}}]}
     const url = 'https://photon.komoot.io/api/?limit=6&q=' + encodeURIComponent(q);
@@ -896,6 +896,14 @@ function travelMinutes(a,b){
       const label = sub ? (title + ', ' + sub) : title;
       return {label, title, sub, lat, lon};
     }).filter(x=>isFinite(x.lat) && isFinite(x.lon));
+  }
+  async function acFetchNominatim(q){
+    const d=await getJSON('https://nominatim.openstreetmap.org/search?format=jsonv2&limit=6&accept-language=it&countrycodes=it&q='+encodeURIComponent(q));
+    return (d||[]).map(x=>{ const parts=String(x.display_name||'').split(', '); return {label:x.display_name, title:(x.name||parts[0]), sub:parts.slice(1).join(', '), lat:+x.lat, lon:+x.lon}; }).filter(x=>isFinite(x.lat)&&isFinite(x.lon));
+  }
+  async function acFetch(q){
+    try{ const a=await acFetchPhoton(q); if(a.length) return a; }catch(e){}
+    return await acFetchNominatim(q); // Photon spesso limita le richieste: riserva su Nominatim
   }
   function debounce(fn, ms){
     let t=null;
