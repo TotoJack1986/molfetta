@@ -3,7 +3,9 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <meta name="theme-color" content="#0b1220" />
+  <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
+  <meta name="theme-color" content="#0c0c0e" media="(prefers-color-scheme: dark)" />
+  <meta name="color-scheme" content="light dark" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-title" content="Molfetta" />
@@ -209,6 +211,67 @@
     #guide .gbtn.dark{background:#2563eb;color:#fff}
     #guide .gbtn:disabled{opacity:.4}
     @media (max-width:800px){ body.guiding .side{display:none} body.guiding .mapCol{flex:1 1 100%} }
+  
+    /* ===== TEMA MINIMAL (chiaro/scuro come l'iPhone) ===== */
+    :root{color-scheme:light dark;--bg:#e9e9ec;--panel:#fff;--card:#fff;--sheet:#fff;--text:#111113;--muted:#86868b;--line:#ececef;--chip:#f3f3f5;--acc:#0a63f5;--brand:#0a63f5;--field:#f3f3f5}
+    @media (prefers-color-scheme: dark){
+      :root{--bg:#000;--panel:#0c0c0e;--card:#0c0c0e;--sheet:#141417;--text:#f5f5f7;--muted:#8e8e93;--line:#26262b;--chip:#1e1e22;--acc:#3b8bff;--brand:#3b8bff;--field:#1e1e22}
+      .leaflet-tile-pane{filter:invert(1) hue-rotate(180deg) brightness(.92) contrast(.9)}
+    }
+    body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text",system-ui,sans-serif;background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased}
+    .side{background:var(--sheet);border:0;padding:22px 22px calc(26px + env(safe-area-inset-bottom,0px))}
+    .hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:26px}
+    .hd h1{margin:0;font-size:28px;font-weight:700;letter-spacing:-.02em}
+    .ico{border:0;background:var(--chip);color:var(--text);width:38px;height:38px;border-radius:50%;font-size:18px}
+    .lbl{display:block;font-size:13px;font-weight:600;color:var(--muted);margin:0 0 8px}
+    .row{display:flex;gap:8px}
+    input{background:var(--field);color:var(--text);border:0;border-radius:14px;padding:15px 16px;font-size:16px;font-family:inherit}
+    input::placeholder{color:var(--muted)}
+    .go{border:0;border-radius:14px;padding:0 18px;background:var(--text);color:var(--sheet);font-weight:700;font-size:15px}
+    .status{display:flex;align-items:center;gap:8px;margin-top:10px;font-size:13px;color:var(--muted)}
+    .status .dot{width:8px;height:8px;background:var(--muted)} .status .dot.on{background:#30d158}
+    .cta{width:100%;margin-top:26px;padding:17px;font-size:17px;font-weight:700;border-radius:16px}
+    .btn.primary{background:var(--acc);box-shadow:none;color:#fff}
+    .btn:disabled{opacity:.35}
+    .progress{background:none;border:0;padding:0}
+    .bar{background:var(--chip);height:6px} .bar>div{background:var(--acc)}
+    .link{border:0;background:none;color:var(--acc);font-size:15px;font-weight:600;padding:8px 0;font-family:inherit}
+    .link.danger{color:#ff453a}
+    #editBar{display:none;margin:-8px 0 8px} body.planned #editBar{display:block}
+    body.planned #setup{display:none}
+    #opts{display:none;margin-top:30px;padding-top:20px;border-top:1px solid var(--line)} #opts.open{display:block}
+    #opts h2{margin:0 0 16px;font-size:17px}
+    .optrow{display:flex;flex-direction:column;margin-top:14px}
+    .tabs{gap:6px;margin-top:0;margin-bottom:6px;flex-wrap:wrap}
+    .tab{flex:0 0 auto;padding:9px 16px;border:0;border-radius:999px;background:var(--chip);color:var(--text);font-weight:600;font-size:14px}
+    .tab.active{background:var(--text);color:var(--sheet)}
+    .pill{background:var(--chip);border:0;color:var(--muted);font-size:14px;padding:8px 14px}
+    .pill.on{background:var(--text);color:var(--sheet)}
+    .mini{font-size:14px;color:var(--muted)}
+    .day{background:none;border:0;padding:0;margin-top:20px}
+    .dayHead b{font-size:20px;font-weight:700;letter-spacing:-.01em}
+    .stop{border-top:1px solid var(--line);padding:16px 0;gap:12px}
+    .stop:first-of-type{border-top:0}
+    .stop .thumb{display:none}
+    .stop b{font-size:17px;font-weight:600}
+    .n{background:var(--acc);border-radius:50%;width:26px;height:26px}
+    .timeCol{width:56px;font-size:14px;font-weight:600;color:var(--text)}
+    .meta{font-size:13px;color:var(--muted);margin-top:4px}
+    .tag{background:none;padding:0;color:var(--muted)}
+    .travelRow{font-size:13px;color:var(--muted);font-weight:500}
+    .gmaps{color:var(--acc);font-size:14px;font-weight:600}
+    .stop.activeStop{background:var(--chip);border-radius:14px;padding:14px}
+    #btnGuide{background:var(--acc);color:#fff;box-shadow:none;border-radius:16px;padding:16px;font-size:16px;font-weight:700}
+    #btnGuide+.btn.secondary{background:none;border:0;color:var(--acc);font-weight:600;font-size:15px}
+    #guide{background:var(--sheet);color:var(--text);border-radius:22px;padding:18px}
+    #guide .ghead{color:var(--muted);letter-spacing:.02em}
+    #guide .gx{background:var(--chip);color:var(--text)}
+    #guide .gname{font-size:22px;font-weight:700;letter-spacing:-.01em}
+    #guide .gbtn{background:var(--chip);color:var(--text);border-radius:14px}
+    #guide .gbtn.dark{background:var(--acc);color:#fff}
+    .acList{background:var(--sheet);border:1px solid var(--line);border-radius:14px;color:var(--text)}
+    .leaflet-popup-content-wrapper,.leaflet-popup-tip{background:var(--sheet);color:var(--text)}
+    @media (max-width:800px){ .side{border-radius:26px 26px 0 0;margin-top:-22px} }
   </style>
 
   <!-- FIX36: Optimized order + real routing + animations -->
@@ -221,86 +284,59 @@
 
 <div class="wrap">
   <aside class="side">
+    <header class="hd"><h1>Molfetta</h1><button class="ico" aria-label="Opzioni" onclick="document.getElementById('opts').classList.toggle('open')">⚙︎</button></header>
 
-    <div class="topbar">
-      <div class="title">🧭 Molfetta Planner</div>
-      <div class="chip"><div class="dot" id="startDot"></div><span id="startText">START non impostato</span></div>
-    </div>
-
-    
-    <div class="card">
-      <h3>🏨 Alloggio (START)</h3>
-      <label>Indirizzo / Hotel / B&amp;B</label>
-      <div style="position:relative;" class="acWrap">
-        <div style="display:flex; gap:8px;">
-          <input id="startAddress" placeholder="Es: B&amp;B, hotel o via (tipo Google Maps)" autocomplete="off" />
-          <button class="btn primary" style="padding:10px 12px; white-space:nowrap;" onclick="setStartFromAddress()">OK</button>
+    <section id="setup">
+      <label class="lbl">Dove dormi?</label>
+      <div class="acWrap" style="position:relative;">
+        <div class="row">
+          <input id="startAddress" placeholder="Indirizzo, hotel o B&amp;B" autocomplete="off" />
+          <button class="go" onclick="setStartFromAddress()">OK</button>
         </div>
         <div id="acList" class="acList" style="display:none;"></div>
       </div>
-      <div class="mini" style="margin-top:6px;">Suggerimenti automatici mentre scrivi • oppure clicca direttamente sulla mappa</div>
-    </div>
-<div class="card">
-      <h3>🗓️ Viaggio (arrivo / partenza)</h3>
-      <div class="grid2">
-        <div>
-          <label>Arrivo (data+ora)</label>
-          <input type="datetime-local" id="arrDT" />
-        </div>
-        <div>
-          <label>Partenza (data+ora)</label>
-          <input type="datetime-local" id="depDT" />
-        </div>
+      <div class="status"><span class="dot" id="startDot"></span><span id="startText">Scrivi l’indirizzo o tocca la mappa</span></div>
+
+      <div class="grid2" style="margin-top:22px;">
+        <div><label class="lbl">Arrivo</label><input type="datetime-local" id="arrDT" /></div>
+        <div><label class="lbl">Partenza</label><input type="datetime-local" id="depDT" /></div>
       </div>
 
-      <div class="tabs" aria-label="Stile">
-        <button class="tab" id="tTop" onclick="setMode('top')">🔥 Top</button>
-        <button class="tab active" id="tBal" onclick="setMode('balanced')">⚖️ Bilanciato</button>
-        <button class="tab" id="tFast" onclick="setMode('fast')">⚡ Veloce</button>
+      <button class="btn primary cta" id="btnGen" onclick="generatePlan()" disabled>Crea itinerario</button>
+      <div class="progress" id="prog"><div class="bar"><div id="progBar"></div></div><div class="ptext"><span id="progLeft">—</span><span id="progRight">—</span></div></div>
+    </section>
+
+    <div id="editBar"><button class="link" onclick="document.body.classList.remove('planned')">← Modifica dati</button></div>
+
+    <section id="result">
+      <div id="dayTabs" class="tabs"></div>
+      <div id="out" class="mini"></div>
+    </section>
+
+    <section id="opts">
+      <h2>Opzioni</h2>
+      <label class="lbl">Cosa cercare</label>
+      <div class="tabs" style="margin-top:0">
+        <button class="tab active" id="btnPoiMode" onclick="setContentMode('poi')">Attrazioni</button>
+        <button class="tab" id="btnFoodMode" onclick="setContentMode('food')">Cibo</button>
       </div>
-
-      <div class="kpi">
-        <div class="box"><div class="k">POI visibili</div><div class="v" id="kPoi">0</div></div>
-        <div class="box"><div class="k">Giorni</div><div class="v" id="kDays">0</div></div>
-        <div class="box"><div class="k">Fuori</div><div class="v" id="kLeft">0</div></div>
+      <label class="lbl" style="margin-top:18px;">Tipi di luogo</label>
+      <div class="filters">
+        <div class="pill on" id="fChiesa" onclick="toggleType('chiesa')">Chiese</div>
+        <div class="pill on" id="fStorico" onclick="toggleType('storico')">Storico</div>
+        <div class="pill on" id="fAttr" onclick="toggleType('attrazione')">Attrazioni</div>
+        <div class="pill on" id="fNatura" onclick="toggleType('natura')">Natura</div>
+        <div class="pill on" id="fMuseo" onclick="toggleType('museo')">Musei</div>
       </div>
-
-      <div style="margin-top:10px;">
-        <div class="mini" style="margin-bottom:6px;">Contenuti</div>
-<div class="tabs">
-  <button class="tab active" id="btnPoiMode" onclick="setContentMode('poi')">🗺️ Attrazioni</button>
-  <button class="tab" id="btnFoodMode" onclick="setContentMode('food')">🍝 Cibo</button>
-</div>
-<div class="mini" style="margin:10px 0 6px;">Filtri POI</div>
-        <div class="filters">
-          <div class="pill on" id="fChiesa" onclick="toggleType('chiesa')">⛪ Chiese</div>
-          <div class="pill on" id="fStorico" onclick="toggleType('storico')">🏛️ Storico</div>
-          <div class="pill on" id="fAttr" onclick="toggleType('attrazione')">📍 Attrazioni</div>
-          <div class="pill on" id="fNatura" onclick="toggleType('natura')">🌿 Natura</div>
-          <div class="pill on" id="fMuseo" onclick="toggleType('museo')">🖼️ Musei</div>
-        </div>
+      <div class="optrow">
+        <button class="link" id="btnLoad" onclick="loadPOI()">Ricarica i luoghi</button>
+        <button class="link danger" onclick="resetAll()">Ricomincia da capo</button>
       </div>
-
-      <div class="btnRow">
-        <button class="btn secondary" id="btnLoad" onclick="loadPOI()">📥 Carica POI reali</button>
-        <button class="btn primary" id="btnGen" onclick="generatePlan()" disabled>✨ Genera itinerario</button>
-        <button class="btn danger" onclick="resetAll()">Reset</button>
+      <div hidden>
+        <button id="tTop" onclick="setMode('top')"></button><button id="tBal" onclick="setMode('balanced')"></button><button id="tFast" onclick="setMode('fast')"></button>
+        <span id="kPoi">0</span><span id="kDays">0</span><span id="kLeft">0</span><div id="routeStatus"></div>
       </div>
-
-      <div class="progress" id="prog">
-        <div class="bar"><div id="progBar"></div></div>
-        <div class="ptext"><span id="progLeft">—</span><span id="progRight">—</span></div>
-      </div>
-
-      <div class="mini" style="margin-top:10px;">START: clic sulla mappa • POI: “Carica POI reali” • Itinerario: “Genera”</div><div id="routeStatus" class="routeLegend">Percorsi a piedi reali (OSRM foot) • orari di apertura e pausa pranzo inclusi.</div>
-    </div>
-
-    <div class="card">
-      <h3>📌 Output</h3>
-      <div id="dayTabs" class="tabs" style="margin-top:8px; margin-bottom:8px;"></div>
-      <div id="out" class="mini">Nessun itinerario ancora.</div>
-    </div>
-
+    </section>
   </aside>
 
   <main class="mapCol">
@@ -512,7 +548,7 @@ async function routeDay(idx){
   let dayBounds = [];
 
   function clearDays(){
-    try{ if(typeof guideExit==='function') guideExit(); if(!map.hasLayer(cluster)) map.addLayer(cluster); }catch(e){}
+    try{ document.body.classList.remove('planned'); if(typeof guideExit==='function') guideExit(); if(!map.hasLayer(cluster)) map.addLayer(cluster); }catch(e){}
     stopRouteAnim();
     dayLayers.forEach(g => { try{ map.removeLayer(g); }catch(e){} });
     dayLayers = [];
@@ -808,7 +844,7 @@ function travelMinutes(a,b){
     startLayer.clearLayers();
     L.marker([latlng.lat, latlng.lng], {icon:startIcon()}).addTo(startLayer);
     startDot.classList.add('on');
-    startText.textContent = `START impostato (${latlng.lat.toFixed(4)}, ${latlng.lng.toFixed(4)})`;
+    startText.textContent = 'Alloggio impostato';
     btnGen.disabled = !(poiLoaded && start);
   }
   map.on('click', e=> setStart(e.latlng));
@@ -1485,7 +1521,7 @@ function travelMinutes(a,b){
 
     });
 
-    window.__PLANS=plans; ensureGuideBtn(); if(map.hasLayer(cluster)) map.removeLayer(cluster);
+    window.__PLANS=plans; ensureGuideBtn(); document.body.classList.add('planned'); if(map.hasLayer(cluster)) map.removeLayer(cluster);
     if(dayLayers.length){ showDay(0); if(typeof routeDay === "function") routeDay(0); }
 
     if(!plans.length){
@@ -1512,9 +1548,9 @@ function travelMinutes(a,b){
     routeLayer.clearLayers();
     clearDays();
     startLayer.clearLayers();
-    out.textContent='Nessun itinerario ancora.';
+    out.textContent=''; document.body.classList.remove('planned');
     startDot.classList.remove('on');
-    startText.textContent='START non impostato';
+    startText.textContent='Scrivi l’indirizzo o tocca la mappa';
     btnGen.disabled=true;
     kPoi.textContent='0';
     kDays.textContent='0';
