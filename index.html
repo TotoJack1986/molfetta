@@ -52,7 +52,8 @@
     .card{background:var(--card);border:1px solid var(--line);border-radius:var(--r16);padding:12px;box-shadow:0 4px 14px rgba(0,0,0,.06);margin-bottom:10px}
     .card h3{margin:0 0 8px 0;font-size:13px;color:var(--text)}
 
-    .grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    .grid2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px}
+    .grid2 input{min-width:0;width:100%;box-sizing:border-box}
     label{display:block;font-size:11px;color:var(--muted);margin-bottom:6px}
     input{width:100%;padding:10px;border-radius:12px;border:1px solid var(--line);outline:0;background:#fff;color:var(--text);font-size:13px}
 
@@ -295,10 +296,9 @@
 <script>
   // MAP (cleaner tiles)
   const map = L.map('map', { zoomControl:true }).setView([41.2005, 16.5985], 14);
-  L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-    subdomains: 'abcd',
+  L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
     maxZoom: 19,
-    attribution: '&copy; OpenStreetMap &copy; CARTO'
+    attribution: '&copy; OpenStreetMap contributors'
   }).addTo(map);
 
   // Layers
