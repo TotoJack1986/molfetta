@@ -980,34 +980,38 @@ function travelMinutes(a,b){
 
   function sleep(ms){ return new Promise(r=>setTimeout(r, ms)); }
   const BBOX={minLat:41.17,maxLat:41.24,minLon:16.55,maxLon:16.66};
+  let lastGeoErr='';
+  const inBox=(lat,lon)=>lat>=BBOX.minLat&&lat<=BBOX.maxLat&&lon>=BBOX.minLon&&lon<=BBOX.maxLon;
+  async function getJSON(url){
+    const ac=new AbortController(); const t=setTimeout(()=>ac.abort(),9000);
+    try{ const r=await fetch(url,{signal:ac.signal}); if(!r.ok) throw new Error('HTTP '+r.status); return await r.json(); }
+    finally{ clearTimeout(t); }
+  }
+  async function viaNominatim(q){
+    const d=await getJSON('https://nominatim.openstreetmap.org/search?format=jsonv2&limit=1&accept-language=it&bounded=1&viewbox='+BBOX.minLon+','+BBOX.maxLat+','+BBOX.maxLon+','+BBOX.minLat+'&q='+encodeURIComponent(q));
+    if(d&&d.length){ const lat=+d[0].lat, lon=+d[0].lon; if(inBox(lat,lon)) return {lat,lon}; }
+    return null;
+  }
+  async function viaPhoton(q){
+    const d=await getJSON('https://photon.komoot.io/api/?limit=6&lat=41.2005&lon=16.5985&q='+encodeURIComponent(q));
+    for(const f of (d.features||[])){ const lat=+f.geometry.coordinates[1], lon=+f.geometry.coordinates[0]; if(inBox(lat,lon)) return {lat,lon}; }
+    return null;
+  }
   async function geocodeOne(q){
-    const url='https://photon.komoot.io/api/?limit=6&lat=41.2005&lon=16.5985&q='+encodeURIComponent(q);
-    for(let attempt=0;attempt<2;attempt++){
-      try{
-        const res=await fetch(url,{headers:{'Accept':'application/json'}});
-        if(!res.ok) throw new Error('HTTP '+res.status);
-        const data=await res.json();
-        for(const f of (data.features||[])){
-          const lat=Number(f.geometry.coordinates[1]), lon=Number(f.geometry.coordinates[0]);
-          if(lat>=BBOX.minLat&&lat<=BBOX.maxLat&&lon>=BBOX.minLon&&lon<=BBOX.maxLon) return {lat,lon};
-        }
-        return null; // nessun risultato dentro Molfetta: meglio niente che un punto sbagliato
-      }catch(e){ if(attempt) throw e; await sleep(600); }
-    }
+    let hadErr=false;
+    try{ const p=await viaNominatim(q); if(p) return p; }catch(e){ hadErr=true; lastGeoErr='Nominatim: '+(e.message||e); }
+    try{ return await viaPhoton(q); }catch(e){ lastGeoErr+=' | Photon: '+(e.message||e); throw e; }
   }
   async function geocodeSeeds(){
-    const items=[], failed=[]; let done=0;
-    for(let i=0;i<SEED.length;i+=4){
-      await Promise.all(SEED.slice(i,i+4).map(async (sd,j)=>{
-        const q=/molfetta/i.test(sd.name)? sd.name+', Italia' : sd.name+', Molfetta, Italia';
-        try{
-          const pos=await geocodeOne(q);
-          if(pos) items.push({id:'seed/'+(i+j+1),...sd,lat:pos.lat,lon:pos.lon}); else failed.push(sd.name);
-        }catch(e){ failed.push(sd.name); }
-        done++; const pct=Math.round(done/SEED.length*100);
-        progBar.style.width=pct+'%'; progLeft.textContent=done+' / '+SEED.length; progRight.textContent=pct+'%';
-      }));
-      await sleep(300);
+    const items=[], failed=[]; let done=0; lastGeoErr='';
+    for(let i=0;i<SEED.length;i++){
+      const sd=SEED[i];
+      const q=/molfetta/i.test(sd.name)? sd.name : sd.name+' Molfetta';
+      try{ const pos=await geocodeOne(q); if(pos) items.push({id:'seed/'+(i+1),...sd,lat:pos.lat,lon:pos.lon}); else failed.push(sd.name); }
+      catch(e){ failed.push(sd.name); }
+      done++; const pct=Math.round(done/SEED.length*100);
+      progBar.style.width=pct+'%'; progLeft.textContent=done+' / '+SEED.length; progRight.textContent=pct+'%';
+      await sleep(1100); // rispetta il limite di 1 richiesta/secondo di Nominatim
     }
     return {items,failed};
   }
@@ -1043,7 +1047,7 @@ function travelMinutes(a,b){
     prog.style.display='none';
     if(!items.length){
       window.__POIS=[]; poiLoaded=false; btnGen.disabled=true; drawPOI();
-      out.innerHTML='<span style="color:#b00020;font-weight:900;">Caricamento fallito (rete o limite del servizio). Riprova tra poco.</span>';
+      out.innerHTML='<span style="color:#b00020;font-weight:900;">Caricamento fallito. Riprova tra poco.</span>'+(lastGeoErr?'<br><small>'+String(lastGeoErr).replace(/</g,'&lt;')+'</small>':'');
       return;
     }
     window.__POIS=items; poiLoaded=true; drawPOI(); btnGen.disabled=!(poiLoaded&&start);
